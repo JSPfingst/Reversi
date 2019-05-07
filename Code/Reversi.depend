@@ -12,25 +12,74 @@
 1557086838 source:f:\reversi\reversi\code\output.c
 	<stdio.h>
 
+1557212690 D
+
 1557217308 source:g:\reversi\code\board.c
 	"board.h"
 	<ctype.h>
 
-1557066813 source:g:\reversi\code\gamelogic.c
-
-1557066813 source:g:\reversi\code\input.c
-
-1557216027 source:g:\reversi\code\main.c
+1557214177 61f4270eb775310b61c4378b4eadd6342b4d8
 	"board.h"
-	"output.h"
+	"board.h"
+	<ctype.h>
+
+1557263770 
+
+1557083251 b1889e708d44478b7af41b54e1a70ad61267e
 	<stdio.h>
 	<stdlib.h>
 
-1557217160 source:g:\reversi\code\output.c
+1557066813 source:g:\reversi\code\gamelogic.c
+
+1557218871 source:g:\reversi\code\input.c
+	"board.h"
+	<stdio.h>
+	<stdlib.h>
+
+1557218948 source:g:\reversi\code\main.c
+	"board.h"
+	"output.h"
+	"input.h"
+	<stdio.h>
+	<stdlib.h>
+
+1557218630 source:g:\reversi\code\output.c
 	"board.h"
 	<stdio.h>
 
 1557217091 g:\reversi\code\board.h
 
+1557263770 source:c:\users\teilnehmer.pc29\desktop\reversi-master\code\board.c
+	"board.h"
+
+1557263770 c:\users\teilnehmer.pc29\desktop\reversi-master\code\board.h
+
+1557263770 source:c:\users\teilnehmer.pc29\desktop\reversi-master\code\gamelogic.c
+
+1557267788 source:c:\users\teilnehmer.pc29\desktop\reversi-master\code\input.c
+	"board.h"
+	<stdio.h>
+	<stdlib.h>
+
+1557267567 source:c:\users\teilnehmer.pc29\desktop\reversi-master\code\main.c
+	"board.h"
+	<stdio.h>
+	<stdlib.h>
+
+1557263770 source:c:\users\teilnehmer.pc29\desktop\reversi-master\code\output.c
+	"board.h"
+	<stdio.h>
+
 1557083251 g:\reversi\code\output.h
+
+1557263772 source:d:\reversi\code\gamelogic.c
+
+1557267790 source:d:\reversi\code\input.c
+	"board.h"
+	<stdio.h>
+	<stdlib.h>
+
+1557268748 d:\reversi\code\board.h
+
+1557218630 g:\reversi\code\input.h
 

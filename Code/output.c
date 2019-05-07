@@ -1,5 +1,6 @@
 #include "board.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 void printPossibleCharacters()
 {
@@ -9,13 +10,13 @@ void printPossibleCharacters()
     }
 }
 
-///
 /// Prints the Board to the console.
 ///
 /// board: The current state of the game.
 ///
 void printBoard(struct Board board)
 {
+    system("cls");
     /*
      * The starting point of the Reversi board is on the bottom left,
      * therefore the rows are iterated decrementally.
