@@ -1,4 +1,5 @@
 #include "board.h"
+#include "output.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -10,7 +11,6 @@ int main()
     printBoard(board);
     getX();
     getY();
-
 
     return 0;
 }
