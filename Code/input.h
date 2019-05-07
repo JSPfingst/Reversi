@@ -1,7 +1,7 @@
 #ifndef INPUT_H_INCLUDED
 #define INPUT_H_INCLUDED
 
-int getX();
-char getY();
+int GetColumn();
+char GetRow();
 
 #endif // INPUT_H_INCLUDED

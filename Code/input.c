@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int getX()
+int GetColumn()
 {
     int x = 0;
 
@@ -15,7 +15,7 @@ int getX()
     return x;
 };
 
-char getY()
+char GetRow()
 {
     char y;
 

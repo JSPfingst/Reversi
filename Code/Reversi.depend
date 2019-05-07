@@ -31,7 +31,7 @@
 
 1557066813 source:g:\reversi\code\gamelogic.c
 
-1557218871 source:g:\reversi\code\input.c
+1557219348 source:g:\reversi\code\input.c
 	"board.h"
 	<stdio.h>
 	<stdlib.h>
@@ -43,9 +43,10 @@
 	<stdio.h>
 	<stdlib.h>
 
-1557218630 source:g:\reversi\code\output.c
+1557219026 source:g:\reversi\code\output.c
 	"board.h"
 	<stdio.h>
+	<stdlib.h>
 
 1557217091 g:\reversi\code\board.h
 
