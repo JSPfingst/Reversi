@@ -3,6 +3,8 @@
 
 int main()
 {
-    printf("Hello world!\n");
+    //printPossibleCharacters();
+    printBoard();
+
     return 0;
 }

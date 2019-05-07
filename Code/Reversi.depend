@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1557070413 source:f:\reversi\reversi\code\board.c
+
+1557070413 source:f:\reversi\reversi\code\gamelogic.c
+
+1557070413 source:f:\reversi\reversi\code\input.c
+
+1557086864 source:f:\reversi\reversi\code\main.c
+	<stdio.h>
+	<stdlib.h>
+
+1557086838 source:f:\reversi\reversi\code\output.c
+	<stdio.h>
+
