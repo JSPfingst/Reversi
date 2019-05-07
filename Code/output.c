@@ -1,3 +1,4 @@
+#include "board.h"
 #include <stdio.h>
 
 void printPossibleCharacters()
@@ -8,47 +9,17 @@ void printPossibleCharacters()
     }
 }
 
-void printBoard()
+///
+/// Prints the field to the console, using a predefined two-dimensional
+/// integer array.
+///
+void printBoard(struct Board board)
 {
-    ///
-    /// Create a standard Reversi board for testing purposes.
-    ///
-    int board[9][9];
     for(int zeile = 8; zeile >= 0; zeile--)
     {
         for(int spalte = 0; spalte <= 8; spalte++)
         {
-            if(zeile == 0)
-            {
-                board[zeile][spalte] = 3;
-            }
-            else
-            {
-                if(spalte == 0)
-                {
-                    board[zeile][spalte] = 3;
-                }
-                else
-                {
-                    board[zeile][spalte] = 0;
-                }
-            }
-        }
-    }
-    board[4][4] = 1;
-    board[4][5] = 2;
-    board[5][5] = 1;
-    board[5][4] = 2;
-
-    ///
-    /// Prints the field to the console, using a predefined two-dimensional
-    /// integer array.
-    ///
-    for(int zeile = 8; zeile >= 0; zeile--)
-    {
-        for(int spalte = 0; spalte <= 8; spalte++)
-        {
-            switch(board[zeile][spalte])
+            switch(board.field[zeile][spalte])
             {
             case 0:
                 printf("  | ");
