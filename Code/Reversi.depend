@@ -12,7 +12,7 @@
 1557086838 source:f:\reversi\reversi\code\output.c
 	<stdio.h>
 
-1557214177 source:g:\reversi\code\board.c
+1557217308 source:g:\reversi\code\board.c
 	"board.h"
 	<ctype.h>
 
@@ -26,7 +26,7 @@
 	<stdio.h>
 	<stdlib.h>
 
-1557212690 source:g:\reversi\code\output.c
+1557217160 source:g:\reversi\code\output.c
 	"board.h"
 	<stdio.h>
 
