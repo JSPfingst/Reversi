@@ -10,32 +10,43 @@ void printPossibleCharacters()
 }
 
 ///
-/// Prints the field to the console, using a predefined two-dimensional
-/// integer array.
+/// Prints the Board to the console.
+///
+/// board: The current state of the game.
 ///
 void printBoard(struct Board board)
 {
-    for(int zeile = 8; zeile >= 0; zeile--)
+    /*
+     * The starting point of the Reversi board is on the bottom left,
+     * therefore the rows are iterated decrementally.
+     */
+    for(int row = 8; row >= 0; row--)
     {
-        for(int spalte = 0; spalte <= 8; spalte++)
+        for(int column = 0; column <= 8; column++)
         {
-            switch(board.field[zeile][spalte])
+            switch(board.field[row][column])
             {
+            //0: The position is empty.
+            //0: The position is empty.
             case 0:
                 printf("  | ");
                 break;
+            //1: Player 1 has a stone at this position.
             case 1:
                 printf("%c | ", 177);
                 break;
+            //2: Player 2 has a stone at this position.
             case 2:
                 printf("%c | ", 219);
                 break;
+            //3: The position is one of the label positions.
             case 3:
-                if(zeile == 0)
+                if(row == 0)
                 {
-                    if(spalte != 0)
+                    if(column != 0)
                     {
-                        printf("%c | ", spalte + 48);
+                        //Print the number for this label
+                        printf("%c | ", column + 48);
                     }
                     else
                     {
@@ -44,7 +55,8 @@ void printBoard(struct Board board)
                 }
                 else
                 {
-                    printf("%c | ", zeile + 64);
+                    //Print the character for this label
+                    printf("%c | ", row + 64);
                 }
                 break;
             }

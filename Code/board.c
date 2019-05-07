@@ -1,32 +1,43 @@
 #include "board.h"
+#include <ctype.h>
 
 ///
 /// Create a standard Reversi board for testing purposes.
 ///
+/// returns: An instance of the Board structure containing
+///          a new Reversi field.
+///
 struct Board GenerateStartingBoard()
 {
     struct Board board;
-    for(int zeile = 8; zeile >= 0; zeile--)
+
+    /*
+     * The starting point of the Reversi board is on the bottom left,
+     * therefore the rows are iterated decrementally.
+     */
+    for(int row = 8; row >= 0; row--)
     {
-        for(int spalte = 0; spalte <= 8; spalte++)
+        for(int column = 0; column <= 8; column++)
         {
-            if(zeile == 0)
+            if(row == 0)
             {
-                board.field[zeile][spalte] = 3;
+                board.field[row][column] = 3;
             }
             else
             {
-                if(spalte == 0)
+                if(column == 0)
                 {
-                    board.field[zeile][spalte] = 3;
+                    board.field[row][column] = 3;
                 }
                 else
                 {
-                    board.field[zeile][spalte] = 0;
+                    board.field[row][column] = 0;
                 }
             }
         }
     }
+
+    //Place the four default stones.
     board.field[4][4] = 1;
     board.field[4][5] = 2;
     board.field[5][5] = 1;
@@ -34,3 +45,17 @@ struct Board GenerateStartingBoard()
 
     return board;
 };
+
+///
+/// Determines the array index of the row based on its label.
+///
+/// row: The character label of the row.
+///
+/// returns: The array index of the row.
+///
+int GetRowIndex(char row)
+{
+    int rowIndex = (int)(toupper(row)) - 64;
+
+    return rowIndex;
+}

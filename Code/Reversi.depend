@@ -12,15 +12,17 @@
 1557086838 source:f:\reversi\reversi\code\output.c
 	<stdio.h>
 
-1557212761 source:g:\reversi\code\board.c
+1557214177 source:g:\reversi\code\board.c
 	"board.h"
+	<ctype.h>
 
 1557066813 source:g:\reversi\code\gamelogic.c
 
 1557066813 source:g:\reversi\code\input.c
 
-1557212677 source:g:\reversi\code\main.c
+1557216027 source:g:\reversi\code\main.c
 	"board.h"
+	"output.h"
 	<stdio.h>
 	<stdlib.h>
 
@@ -28,5 +30,7 @@
 	"board.h"
 	<stdio.h>
 
-1557212710 g:\reversi\code\board.h
+1557217091 g:\reversi\code\board.h
+
+1557083251 g:\reversi\code\output.h
 
