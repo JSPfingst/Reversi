@@ -84,3 +84,33 @@
 
 1557218630 g:\reversi\code\input.h
 
+1557805370 source:c:\users\teilnehmer.pc29\desktop\code\gamelogic.c
+
+1557805370 source:c:\users\teilnehmer.pc29\desktop\code\input.c
+	"board.h"
+	<stdio.h>
+	<stdlib.h>
+
+1557807269 c:\users\teilnehmer.pc29\desktop\code\board.h
+
+1557807773 source:c:\users\teilnehmer.pc29\desktop\code\output.c
+	"board.h"
+	<stdio.h>
+	<stdlib.h>
+
+1557807159 source:c:\users\teilnehmer.pc29\desktop\code\board.c
+	"board.h"
+	<ctype.h>
+	<time.h>
+
+1557807632 source:c:\users\teilnehmer.pc29\desktop\code\main.c
+	"board.h"
+	"output.h"
+	"input.h"
+	<stdio.h>
+	<stdlib.h>
+
+1557805370 c:\users\teilnehmer.pc29\desktop\code\output.h
+
+1557805370 c:\users\teilnehmer.pc29\desktop\code\input.h
+

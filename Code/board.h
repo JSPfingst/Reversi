@@ -13,10 +13,13 @@ struct Board
     int field[9][9];
     int currentPlayer;
     int scorePlayer1, scorePlayer2;
-    int time;
+    long starttime;
+    long currenttime;
 };
 
 struct Board GenerateStartingBoard();
 int GetRowIndex(char row);
+long starttimer();
+long currenttime(long starttime);
 
 #endif // BOARD_H_INCLUDED

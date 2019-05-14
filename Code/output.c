@@ -21,6 +21,9 @@ void printBoard(struct Board board)
      * The starting point of the Reversi board is on the bottom left,
      * therefore the rows are iterated decrementally.
      */
+
+     printf("Laufzeit des aktuellen Spiels:%lds\n\n",board.currenttime);
+
     for(int row = 8; row >= 0; row--)
     {
         for(int column = 0; column <= 8; column++)

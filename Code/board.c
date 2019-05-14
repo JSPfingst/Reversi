@@ -1,5 +1,6 @@
 #include "board.h"
 #include <ctype.h>
+#include <time.h>
 
 ///
 /// Create a standard Reversi board for testing purposes.
@@ -59,3 +60,20 @@ int GetRowIndex(char row)
 
     return rowIndex;
 }
+
+long starttimer()
+{
+    time_t now;
+	time(&now);
+	return now;
+}
+
+long currenttime(long starttime)
+{
+    long gametime;
+    time_t now;
+	time(&now);
+	gametime = now - starttime;
+	return gametime;
+}
+
