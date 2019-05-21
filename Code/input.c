@@ -1,6 +1,8 @@
 #include "board.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <conio.h>
+#include <ctype.h>
 
 int GetColumn()
 {
@@ -27,3 +29,17 @@ char GetRow()
 
     return y;
 };
+
+int GetUserChoice()
+{
+    int input = getch();
+
+    if(input >= 49 && input <= 51)
+    {
+        return input - 48;
+    }
+    else
+    {
+        return 0;
+    }
+}

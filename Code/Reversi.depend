@@ -14,9 +14,11 @@
 
 1557212690 D
 
-1557217308 source:g:\reversi\code\board.c
+1558429027 source:g:\reversi\code\board.c
 	"board.h"
+	<conio.h>
 	<ctype.h>
+	<time.h>
 
 1557214177 61f4270eb775310b61c4378b4eadd6342b4d8
 	"board.h"
@@ -29,26 +31,34 @@
 	<stdio.h>
 	<stdlib.h>
 
-1557066813 source:g:\reversi\code\gamelogic.c
+1558374152 source:g:\reversi\code\gamelogic.c
 
-1557219348 source:g:\reversi\code\input.c
+1558374776 source:g:\reversi\code\input.c
 	"board.h"
 	<stdio.h>
 	<stdlib.h>
+	<conio.h>
+	<ctype.h>
 
-1557218948 source:g:\reversi\code\main.c
+1558429136 source:g:\reversi\code\main.c
 	"board.h"
 	"output.h"
 	"input.h"
 	<stdio.h>
+	<conio.h>
 	<stdlib.h>
+	<time.h>
 
-1557219026 source:g:\reversi\code\output.c
+1558427550 source:g:\reversi\code\output.c
 	"board.h"
+	"input.h"
 	<stdio.h>
 	<stdlib.h>
+	<conio.h>
+	<time.h>
+	<windows.h>
 
-1557217091 g:\reversi\code\board.h
+1558428964 g:\reversi\code\board.h
 
 1557263770 source:c:\users\teilnehmer.pc29\desktop\reversi-master\code\board.c
 	"board.h"
@@ -71,7 +81,7 @@
 	"board.h"
 	<stdio.h>
 
-1557083251 g:\reversi\code\output.h
+1558421878 g:\reversi\code\output.h
 
 1557263772 source:d:\reversi\code\gamelogic.c
 
@@ -82,7 +92,7 @@
 
 1557268748 d:\reversi\code\board.h
 
-1557218630 g:\reversi\code\input.h
+1558374438 g:\reversi\code\input.h
 
 1557805370 source:c:\users\teilnehmer.pc29\desktop\code\gamelogic.c
 
@@ -113,4 +123,41 @@
 1557805370 c:\users\teilnehmer.pc29\desktop\code\output.h
 
 1557805370 c:\users\teilnehmer.pc29\desktop\code\input.h
+
+1558377972 source:f:\reversi\code\board.c
+	"board.h"
+	<ctype.h>
+	<time.h>
+
+1558381682 f:\reversi\code\board.h
+
+1558377752 source:f:\reversi\code\gamelogic.c
+
+1558378376 source:f:\reversi\code\input.c
+	"board.h"
+	<stdio.h>
+	<stdlib.h>
+	<conio.h>
+	<ctype.h>
+
+1558378903 source:f:\reversi\code\main.c
+	"board.h"
+	"output.h"
+	"input.h"
+	<stdio.h>
+	<conio.h>
+	<stdlib.h>
+	<time.h>
+
+1558377752 f:\reversi\code\output.h
+
+1558378038 f:\reversi\code\input.h
+
+1558381655 source:f:\reversi\code\output.c
+	"board.h"
+	"input.h"
+	<stdio.h>
+	<stdlib.h>
+	<conio.h>
+	<windows.h>
 

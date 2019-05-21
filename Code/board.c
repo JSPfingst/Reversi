@@ -1,4 +1,5 @@
 #include "board.h"
+#include <conio.h>
 #include <ctype.h>
 #include <time.h>
 
@@ -11,6 +12,13 @@
 struct Board GenerateStartingBoard()
 {
     struct Board board;
+
+    board.currentPlayer = 1;
+    board.time = 0;
+    board.pauseDuration = 0;
+    board.isPaused = 0;
+    board.selectedRow = 1;
+    board.selectedColumn = 1;
 
     /*
      * The starting point of the Reversi board is on the bottom left,
@@ -48,6 +56,27 @@ struct Board GenerateStartingBoard()
 };
 
 ///
+/// Updates the currentPlayer member of the given Board structure.
+///
+/// board: The current game state of the game.
+///
+/// returns: The game state, with the updated currentPlayer member.
+///
+struct Board UpdateCurrentPlayer(struct Board board)
+{
+    if(board.currentPlayer == 1)
+    {
+        board.currentPlayer = 2;
+    }
+    else if(board.currentPlayer == 2)
+    {
+        board.currentPlayer = 1;
+    }
+
+    return board;
+}
+
+///
 /// Determines the array index of the row based on its label.
 ///
 /// row: The character label of the row.
@@ -61,19 +90,48 @@ int GetRowIndex(char row)
     return rowIndex;
 }
 
-long starttimer()
+///
+/// Returns the current time in seconds.
+///
+/// returns: The current time in seconds.
+///
+long GetCurrentTime()
 {
     time_t now;
 	time(&now);
 	return now;
 }
 
-long currenttime(long starttime)
+///
+/// Pauses the game and returns the duration of the pause in seconds,
+/// when the game is resumed.
+///
+/// returns: The duration of the pause in seconds.
+///
+int PauseGame()
 {
-    long gametime;
-    time_t now;
-	time(&now);
-	gametime = now - starttime;
-	return gametime;
-}
+    time_t pauseStart = time(&pauseStart), pauseEnd = 0;
+    int key = 0;
 
+    while(pauseEnd == 0)
+    {
+        if(kbhit())
+        {
+            key = getch();
+
+            if(key == 79)
+            {
+                return -1;
+            }
+
+            //Game unpaused => get the end time of the pause
+            if(key == 112)
+            {
+                pauseEnd = time(&pauseEnd);
+            }
+        }
+    }
+
+    //Return the duration of the pause
+    return pauseEnd - pauseStart;
+}

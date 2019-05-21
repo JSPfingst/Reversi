@@ -1,7 +1,5 @@
 #ifndef BOARD_H_INCLUDED
 #define BOARD_H_INCLUDED
-#define HEIGHT 8
-#define WIDTH 8
 
 ///
 /// The Board struct represents the current game state.
@@ -13,13 +11,17 @@ struct Board
     int field[9][9];
     int currentPlayer;
     int scorePlayer1, scorePlayer2;
-    long starttime;
-    long currenttime;
+    int starttime;
+    int time;
+    int isPaused;
+    int pauseDuration;
+    int selectedRow, selectedColumn;
 };
 
+struct Board UpdateCurrentPlayer(struct Board board);
 struct Board GenerateStartingBoard();
+long GetCurrentTime();
 int GetRowIndex(char row);
-long starttimer();
-long currenttime(long starttime);
+int PauseGame();
 
 #endif // BOARD_H_INCLUDED

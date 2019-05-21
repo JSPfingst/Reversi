@@ -3,5 +3,6 @@
 
 int GetColumn();
 char GetRow();
+int GetUserChoice();
 
 #endif // INPUT_H_INCLUDED
