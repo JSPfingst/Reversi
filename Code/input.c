@@ -1,45 +1,176 @@
 #include "board.h"
+#include "output.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
 #include <ctype.h>
 
-int GetColumn()
+///
+/// Handles keyboard input in the main menu.
+///
+/// selectedItem: A pointer to the index of the currently selected menu item.
+///
+/// returns: 1 if the output needs to be reprinted, 0 if not.
+///
+int HandleMainMenuInput(int key, int *selectedItem)
 {
-    int x = 0;
+    int reprintMenu = 0;
 
-    do{
-        printf("X-Koordinate eingeben(1-8):");
-        fflush(stdin);
-        scanf("%d",&x);
-    }while(x > 8 || x < 1);
-
-    return x;
-};
-
-char GetRow()
-{
-    char y;
-
-    do{
-        printf("Y-Koordinate eingeben(A-H):");
-        fflush(stdin);
-        scanf("%c",&y);
-    }while(toupper(y) < 65 || toupper(y) > 72);
-
-    return y;
-};
-
-int GetUserChoice()
-{
-    int input = getch();
-
-    if(input >= 49 && input <= 51)
+    switch(key)
     {
-        return input - 48;
+        //Navigate up
+        case 72:
+            if(*selectedItem > 0)
+            {
+                *selectedItem -= 1;
+            }
+
+            reprintMenu = 1;
+        break;
+        //Navigate down
+        case 80:
+            if(*selectedItem < 2)
+            {
+                *selectedItem += 1;
+            }
+
+            //Set the reprint flag
+            reprintMenu = 1;
+        break;
     }
-    else
+
+    return reprintMenu;
+}
+
+///
+/// Handles keyboard input in the pause menu.
+///
+/// key: The key that was pressed.
+/// selectedItem: A pointer to the index of the currently selected menu item.
+///
+/// returns: 1 if the output needs to be reprinted, 0 if not.
+///
+int HandlePauseMenuInput(int key, int *selectedItem)
+{
+    int reprintMenu = 0;
+
+    switch(key)
     {
-        return 0;
+        //Navigate up
+        case 72:
+            if(*selectedItem > 0)
+            {
+                *selectedItem -= 1;
+            }
+
+            reprintMenu = 1;
+        break;
+        //Navigate down
+        case 80:
+            if(*selectedItem < 2)
+            {
+                *selectedItem += 1;
+            }
+
+            //Set the reprint flag
+            reprintMenu = 1;
+        break;
     }
+
+    return reprintMenu;
+}
+
+///
+/// This method determines which key was pressed and executes
+/// specific logic depending on the pressed key.
+///
+/// board: A pointer to the game state structure of the game.
+///
+void HandleGameInput(struct Board *board)
+{
+    //Get the ASCII code of the pressed key
+    int key = getch();
+    //Get the second code, if the first was a function code
+    if(key == 224)
+    {
+        key = getch();
+    }
+
+    switch(key)
+    {
+        //Navigate up
+        case 72:
+            if(board->selectedRow < 8)
+            {
+                //Update the selected field
+                board->selectedRow += 1;
+
+                //Set the flag to reprint the board to the console
+                board->updated = 1;
+            }
+        break;
+        //Navigate down
+        case 80:
+            if(board->selectedRow > 1)
+            {
+                //Update the selected field
+                board->selectedRow -= 1;
+
+                //Set the flag to reprint the board to the console
+                board->updated = 1;
+            }
+        break;
+        //Navigate right
+        case 77:
+            if(board->selectedColumn < 8)
+            {
+                //Update the selected field
+                board->selectedColumn += 1;
+
+                //Set the flag to reprint the board to the console
+                board->updated = 1;
+            }
+        break;
+        //Navigate left
+        case 75:
+            if(board->selectedColumn > 1)
+            {
+                //Update the selected field
+                board->selectedColumn -= 1;
+
+                //Set the flag to reprint the board to the console
+                board->updated = 1;
+            }
+        break;
+        //Place a stone, when the <Enter> key was pressed
+        case 13:
+            //Temporary validation and stone placement
+            if(board->field[board->selectedRow][board->selectedColumn] == 0)
+            {
+                board->field[board->selectedRow][board->selectedColumn] = board->currentPlayer;
+            }
+
+            //Set the next players turn
+            UpdateCurrentPlayer(board);
+
+            //Set the flag to reprint the board to the console
+            board->updated = 1;
+        break;
+        //Open the pause menu, when the 'p' key was pressed
+        case 112:
+            OpenPauseMenu(board);
+        break;
+    }
+}
+
+///
+/// Prompt the user to input a path on the file system to load or save a file.
+///
+/// filePath: A pointer to the char[], the path will be saved to.
+///
+void PromptForFilePath(char filePath[])
+{
+    printf("\n");
+    printf("Geben Sie den Dateipfad ein (Beispiel: C:\\save.txt): ");
+    scanf("%s", filePath);
 }

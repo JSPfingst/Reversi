@@ -3,12 +3,13 @@
 
 ///
 /// The Board struct represents the current game state.
-/// It contains the field, the score of each player, whose
-/// turn it and how much time has passed.
+/// It contains all data that is
 ///
 struct Board
 {
     int field[9][9];
+    int updated;
+    int gameIsOngoing;
     int currentPlayer;
     int scorePlayer1, scorePlayer2;
     int starttime;
@@ -18,10 +19,9 @@ struct Board
     int selectedRow, selectedColumn;
 };
 
-struct Board UpdateCurrentPlayer(struct Board board);
-struct Board GenerateStartingBoard();
+void UpdateCurrentPlayer(struct Board *board);
+void GenerateStartingBoard(struct Board *board);
 long GetCurrentTime();
 int GetRowIndex(char row);
-int PauseGame();
 
 #endif // BOARD_H_INCLUDED
