@@ -13,7 +13,7 @@
 ///
 /// board: A pointer to the current game state of the game.
 ///
-/// returns: 1 if saving was successful, 0 if not.
+/// returns: 1 if saving was successful, -1 if not and 0, if the operation was cancelled.
 ///
 int SaveGame(struct Board *board)
 {
@@ -24,13 +24,15 @@ int SaveGame(struct Board *board)
 
     if(strcmp(filePath, "cancel") != 0)
     {
-        //Open the file
-        FILE *saveFile = fopen(filePath, "w");
-
+        //Test if the file exists
+        FILE *saveFile = fopen(filePath, "r");
         if(saveFile == NULL)
         {
-            return 0;
+            return -1;
         }
+
+        //Open the save file
+        saveFile = fopen(filePath, "w");
 
         //Write the field to the save file
         for(int row = 0; row <= 8; row++)
@@ -67,14 +69,14 @@ int SaveGame(struct Board *board)
 ///
 /// board: A pointer to the current game state of the game.
 ///
-/// returns: 1 if loading was successful, 0 if not.
+/// returns: 1 if loading was successful, -1 if not and 0, if the operation was cancelled.
 ///
 int LoadGame(struct Board *board)
 {
     char filePath[256];
     char saveFileContent[256];
     int index = 0, indexValue;
-    char c;
+    char currentCharacter;
 
     PromptForFilePath(filePath);
 
@@ -86,13 +88,13 @@ int LoadGame(struct Board *board)
         if(saveFile == NULL)
         {
             board->gameIsOngoing = 0;
-            return 0;
+            return -1;
         }
 
         //Read all characters from the file
-        while((c = getc(saveFile)) != EOF && index < 256)
+        while((currentCharacter = getc(saveFile)) != EOF && index < 256)
         {
-            saveFileContent[index] = c;
+            saveFileContent[index] = currentCharacter;
             index++;
         }
 

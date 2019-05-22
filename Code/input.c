@@ -100,10 +100,10 @@ void HandleGameInput(struct Board *board)
     {
         //Navigate up
         case 72:
-            if(board->selectedRow < 8)
+            if(board->selectedRow > 1)
             {
                 //Update the selected field
-                board->selectedRow += 1;
+                board->selectedRow -= 1;
 
                 //Set the flag to reprint the board to the console
                 board->updated = 1;
@@ -111,10 +111,10 @@ void HandleGameInput(struct Board *board)
         break;
         //Navigate down
         case 80:
-            if(board->selectedRow > 1)
+            if(board->selectedRow < 8)
             {
                 //Update the selected field
-                board->selectedRow -= 1;
+                board->selectedRow += 1;
 
                 //Set the flag to reprint the board to the console
                 board->updated = 1;

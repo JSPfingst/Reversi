@@ -18,7 +18,7 @@
 void OpenMainMenu()
 {
     struct Board board;
-    int selectedItem = 0, key = 0, exitGame = 0;
+    int selectedItem = 0, key = 0, exitGame = 0, loadResult = 0, printLoadMessage = 0;
 
     /*
      * Flag to reprint the menu to the console.
@@ -44,6 +44,29 @@ void OpenMainMenu()
             reprintMenu = HandleMainMenuInput(key, &selectedItem);
         }
 
+        //Reprint the menu, if the reprint flag is set
+        if(reprintMenu)
+        {
+            PrintMainMenu(selectedItem);
+
+            //Reset the reprint flag
+            reprintMenu = 0;
+
+            if(printLoadMessage)
+            {
+                printf("\n");
+                printf(" Der eingegebene Pfad konnte nicht gefunden werden. Dr%ccken Sie <Enter> zum Fortfahren.", '\x81');
+                fflush(stdin);
+
+                //Wait for the <Enter> key to be pressed
+                while(getch() != 13) { }
+                printLoadMessage = 0;
+
+                //Set the flag to reprint the menu without the error message.
+                reprintMenu = 1;
+            }
+        }
+
         //If the <Enter> key was pressed, return the current selection
         if(key == 13)
         {
@@ -56,9 +79,14 @@ void OpenMainMenu()
                 break;
                 //Load a board from a specified save file and start the game
                 case 1:
-                    if(LoadGame(&board))
+                    loadResult = LoadGame(&board);
+                    if(loadResult == 1)
                     {
                         StartGame(&board);
+                    }
+                    else if(loadResult == -1)
+                    {
+                        printLoadMessage = 1;
                     }
                 break;
                 //Set the flag to close the application
@@ -71,15 +99,6 @@ void OpenMainMenu()
             key = 0;
             reprintMenu = 1;
         }
-
-        //Reprint the menu, if the reprint flag is set
-        if(reprintMenu)
-        {
-            PrintMainMenu(selectedItem);
-        }
-
-        //Reset the reprint flag
-        reprintMenu = 0;
     }
 }
 
@@ -134,7 +153,7 @@ void PrintMainMenu(int selectedItem)
 void OpenPauseMenu(struct Board *board)
 {
     time_t pauseStart = time(&pauseStart), pauseEnd = 0;
-    int selectedItem = 0, reprintMenu = 1, pauseDuration = 0, key = 0;
+    int selectedItem = 0, reprintMenu = 1, printSaveMessage = 0, pauseDuration = 0, key = 0, saveResult = 0;
 
     while(pauseEnd == 0)
     {
@@ -155,7 +174,22 @@ void OpenPauseMenu(struct Board *board)
         {
             PrintPauseMenu(selectedItem);
 
+            //Reset the reprint flag
             reprintMenu = 0;
+
+            if(printSaveMessage)
+            {
+                printf("\n");
+                printf(" Der eingegebene Pfad konnte nicht gefunden werden. Dr%ccken Sie <Enter> zum Fortfahren.", '\x81');
+                fflush(stdin);
+
+                //Wait for the <Enter> key to be pressed
+                while(getch() != 13) { }
+                printSaveMessage = 0;
+
+                //Set the flag to reprint the menu without the error message.
+                reprintMenu = 1;
+            }
         }
 
         //Check if the <Enter> key was pressed
@@ -169,7 +203,11 @@ void OpenPauseMenu(struct Board *board)
                 break;
                 //Save the game
                 case 1:
-                    SaveGame(board);
+                    saveResult = SaveGame(board);
+                    if(saveResult == -1)
+                    {
+                        printSaveMessage = 1;
+                    }
 
                     /*
                      * Reset the key and set the reprint flag,
@@ -202,7 +240,7 @@ void PrintPauseMenu(int selectedItem)
     system("cls");
 
     printf("\n");
-    printf("   Reversi - Pausiert\n");
+    printf("   Pause\n");
     printf("\n");
 
     if(selectedItem == 0)
@@ -225,11 +263,11 @@ void PrintPauseMenu(int selectedItem)
 
     if(selectedItem == 2)
     {
-        printf(" > Zurueck zum Hauptmenue <\n");
+        printf(" > Zur%cck zum Hauptmen\x81 <\n", '\x81');
     }
     else
     {
-        printf("   Zurueck zum Hauptmenue\n");
+        printf("   Zur%cck zum Hauptmen\x81\n", '\x81');
     }
 }
 
@@ -240,73 +278,123 @@ void PrintPauseMenu(int selectedItem)
 ///
 void printBoard(struct Board *board)
 {
-    char field[5];
-    field[3] = '|';
-    field[4] = 0;
+    char cell[5];
 
     system("cls");
 
-    printf(" Current Player: %i\n", board->currentPlayer);
-    printf(" Time: %i\n", (int)difftime(board->time, board->starttime) - board->pauseDuration);
+    printf("\n");
+    printf(" Verwenden Sie die Pfeiltasten, um ein Feld auszuw\x84hlen und dr%ccken Sie <Enter>\n", '\x81');
+    printf(" um in dem Feld einen Stein Ihrer Farbe zu platzieren\n");
+    printf("\n");
+    printf(" Am Zug ist derzeit: Spieler %i\n", board->currentPlayer);
+    printf(" Vergangene Zeit: %i | Dr%ccken Sie 'p' um das Spiel zu pausieren\n", (int)difftime(board->time, board->starttime) - board->pauseDuration, '\x81');
     printf("\n");
 
     /*
      * The starting point of the Reversi board is on the bottom left,
      * therefore the rows are iterated decrementally.
      */
-    for(int row = 8; row >= 0; row--)
+    for(int row = 1; row <= 17; row++)
     {
-        for(int column = 0; column <= 8; column++)
+        if(row%2 == 0)
         {
-            if(row == board->selectedRow && column == board->selectedColumn)
-            {
-                field[0] = '>';
-                field[2] = '<';
-            }
-            else
-            {
-                field[0] = ' ';
-                field[2] = ' ';
-            }
+            //Print the beginning of this line
+            printf(" %c", 186);
+            cell[3] = 186;
 
-            switch(board->field[row][column])
+            //Print the all cells
+            for(int column = 1; column <= 8; column++)
             {
-                //0: The position is empty.
-                case 0:
-                    field[1] = ' ';
-                break;
-                //1: Player 1 has a stone at this position.
+                if(row / 2 == board->selectedRow && column == board->selectedColumn)
+                {
+                    //Highlighted cell
+                    cell[0] = '>';
+                    cell[2] = '<';
+                }
+                else
+                {
+                    //Normal cell
+                    cell[0] = ' ';
+                    cell[2] = ' ';
+                }
+
+                switch(board->field[row / 2][column])
+                {
+                    //0: The position is empty.
+                    case 0:
+                        cell[1] = ' ';
+                    break;
+                    //1: Player 1 has a stone at this position.
+                    case 1:
+                        cell[1] = 177;
+                    break;
+                    //2: Player 2 has a stone at this position.
+                    case 2:
+                        cell[1] = 219;
+                    break;
+                }
+
+                //Print the cell to the console
+                printf("%s", cell);
+            }
+        }
+        else
+        {
+            cell[0] = 205;
+            cell[1] = 205;
+            cell[2] = 205;
+            cell[4] = 0;
+
+            switch(row)
+            {
+                //First row
                 case 1:
-                    field[1] = 177;
-                break;
-                //2: Player 2 has a stone at this position.
-                case 2:
-                    field[1] = 219;
-                break;
-                //3: The position is one of the label positions.
-                case 3:
-                    if(row == 0)
+                    //Print the beginning of this line
+                    printf(" %c", 201);
+
+                    cell[3] = 203;
+
+                    for(int column = 1; column <= 7; column++)
                     {
-                        if(column != 0)
-                        {
-                            //Print the number for this label
-                            field[1] = (char)(column + 48);
-                        }
-                        else
-                        {
-                            //Empty field
-                            field[1] = ' ';
-                        }
+                        printf("%s", cell);
                     }
-                    else
+
+                    //Last column
+                    cell[3] = 187;
+                    printf("%s", cell);
+                break;
+                //Last row
+                case 17:
+                    //Print the beginning of this line
+                    printf(" %c", 200);
+
+                    cell[3] = 202;
+
+                    for(int column = 1; column <= 7; column++)
                     {
-                        //Print the character for this label
-                        field[1] = (char)(row + 64);
+                        printf("%s", cell);
                     }
+
+                    //Last column
+                    cell[3] = 188;
+                    printf("%s", cell);
+                break;
+                default:
+                    //Print the beginning of this line
+                    printf(" %c", 204);
+
+                    cell[3] = 206;
+
+                    for(int column = 1; column <= 7; column++)
+                    {
+                        printf("%s", cell);
+                    }
+
+                    //Last column
+                    cell[3] = 185;
+                    printf("%s", cell);
                 break;
             }
-
-            printf("%s", field);
         }
 
         printf("\n");

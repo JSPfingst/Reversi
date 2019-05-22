@@ -27,33 +27,19 @@ void GenerateStartingBoard(struct Board *board)
      * The starting point of the Reversi board is on the bottom left,
      * therefore the rows are iterated decrementally.
      */
-    for(int row = 8; row >= 0; row--)
+    for(int row = 1; row <= 8; row++)
     {
-        for(int column = 0; column <= 8; column++)
+        for(int column = 1; column <= 8; column++)
         {
-            if(row == 0)
-            {
-                board->field[row][column] = 3;
-            }
-            else
-            {
-                if(column == 0)
-                {
-                    board->field[row][column] = 3;
-                }
-                else
-                {
-                    board->field[row][column] = 0;
-                }
-            }
+            board->field[row][column] = 0;
         }
     }
 
     //Place the four default stones.
     board->field[4][4] = 1;
     board->field[4][5] = 2;
-    board->field[5][5] = 1;
     board->field[5][4] = 2;
+    board->field[5][5] = 1;
 };
 
 ///
@@ -73,20 +59,6 @@ void UpdateCurrentPlayer(struct Board *board)
     {
         board->currentPlayer = 1;
     }
-}
-
-///
-/// Determines the array index of the row based on its label.
-///
-/// row: The character label of the row.
-///
-/// returns: The array index of the row.
-///
-int GetRowIndex(char row)
-{
-    int rowIndex = (int)(toupper(row)) - 64;
-
-    return rowIndex;
 }
 
 ///
