@@ -134,7 +134,7 @@
 
 1558377752 source:f:\reversi\code\gamelogic.c
 
-1558538622 source:f:\reversi\code\input.c
+1558542341 source:f:\reversi\code\input.c
 	"board.h"
 	"output.h"
 	<stdio.h>
@@ -142,7 +142,7 @@
 	<conio.h>
 	<ctype.h>
 
-1558538713 source:f:\reversi\code\main.c
+1558539786 source:f:\reversi\code\main.c
 	"board.h"
 	"output.h"
 	"input.h"
@@ -155,7 +155,7 @@
 
 1558526661 f:\reversi\code\input.h
 
-1558539717 source:f:\reversi\code\output.c
+1558541981 source:f:\reversi\code\output.c
 	"board.h"
 	"input.h"
 	"output.h"
@@ -166,7 +166,7 @@
 	<time.h>
 	<windows.h>
 
-1558539315 source:f:\reversi\code\file.c
+1558542271 source:f:\reversi\code\file.c
 	"board.h"
 	"file.h"
 	"input.h"
@@ -176,5 +176,5 @@
 	<string.h>
 	<time.h>
 
-1558536893 f:\reversi\code\file.h
+1558542009 f:\reversi\code\file.h
 

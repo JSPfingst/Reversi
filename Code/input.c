@@ -171,6 +171,6 @@ void HandleGameInput(struct Board *board)
 void PromptForFilePath(char filePath[])
 {
     printf("\n");
-    printf("Geben Sie den Dateipfad ein (Beispiel: C:\\save.txt): ");
+    printf("Geben Sie den Dateipfad ein (Beispiel: 'C:\\save.txt', geben Sie 'cancel' zum Abbrechen ein): ");
     scanf("%s", filePath);
 }

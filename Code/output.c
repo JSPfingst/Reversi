@@ -56,8 +56,10 @@ void OpenMainMenu()
                 break;
                 //Load a board from a specified save file and start the game
                 case 1:
-                    LoadGame(&board);
-                    StartGame(&board);
+                    if(LoadGame(&board))
+                    {
+                        StartGame(&board);
+                    }
                 break;
                 //Set the flag to close the application
                 case 2:
@@ -156,6 +158,7 @@ void OpenPauseMenu(struct Board *board)
             reprintMenu = 0;
         }
 
+        //Check if the <Enter> key was pressed
         if(key == 13)
         {
             switch(selectedItem)
@@ -186,14 +189,7 @@ void OpenPauseMenu(struct Board *board)
 
     pauseDuration = difftime(pauseEnd, pauseStart);
 
-    if(pauseDuration != -1)
-    {
-        board->pauseDuration += pauseDuration;
-    }
-    else
-    {
-        board->gameIsOngoing = 0;
-    }
+    board->pauseDuration += pauseDuration;
 }
 
 ///
