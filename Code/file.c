@@ -53,6 +53,10 @@ int SaveGame(struct Board *board)
         //Close the save file
         fclose(saveFile);
     }
+    else
+    {
+        return 0;
+    }
 
     return 1;
 }
@@ -138,6 +142,10 @@ int LoadGame(struct Board *board)
 
         //Close the save file
         fclose(saveFile);
+    }
+    else
+    {
+        return 0;
     }
 
     return 1;

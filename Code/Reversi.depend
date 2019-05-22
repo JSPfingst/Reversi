@@ -134,7 +134,7 @@
 
 1558377752 source:f:\reversi\code\gamelogic.c
 
-1558542341 source:f:\reversi\code\input.c
+1558542639 source:f:\reversi\code\input.c
 	"board.h"
 	"output.h"
 	<stdio.h>
