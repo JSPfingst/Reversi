@@ -1,3 +1,6 @@
+/**
+File which starts the Menu and the Game itself
+**/
 #include "board.h"
 #include "output.h"
 #include "input.h"

@@ -1,3 +1,6 @@
+/**
+File which handles all game operations regarding the game board and game menu
+**/
 #include "board.h"
 #include <conio.h>
 #include <ctype.h>

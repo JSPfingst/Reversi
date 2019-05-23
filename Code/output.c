@@ -1,3 +1,6 @@
+/**
+File which handles all operations regarding the output of the menus and the gameboard
+**/
 #include "board.h"
 #include "input.h"
 #include "output.h"

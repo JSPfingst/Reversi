@@ -1,3 +1,6 @@
+/**
+File which handles all game operations regarding the game file
+**/
 #include "board.h"
 #include "file.h"
 #include "input.h"

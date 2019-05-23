@@ -1,3 +1,6 @@
+/**
+File which handles all operations regarding the input from the user
+**/
 #include "board.h"
 #include "output.h"
 #include "gamelogic.h"
