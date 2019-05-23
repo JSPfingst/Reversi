@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <conio.h>
 #include <stdlib.h>
-#include <time.h>
 
 int main()
 {
@@ -14,7 +13,11 @@ int main()
     return 0;
 }
 
-/// Hab spontan keine Ahnung, in welcher Datei ich die Funktion unterbringen soll.
+///
+/// Starts a game with the game state in the board structure.
+///
+/// board: The current game state of the game.
+///
 void StartGame(struct Board *board)
 {
     /*

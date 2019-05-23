@@ -24,19 +24,20 @@ int HandleMainMenuInput(int key, int *selectedItem)
             if(*selectedItem > 0)
             {
                 *selectedItem -= 1;
-            }
 
-            reprintMenu = 1;
+                //Set the reprint flag
+                reprintMenu = 1;
+            }
         break;
         //Navigate down
         case 80:
-            if(*selectedItem < 2)
+            if(*selectedItem < 3)
             {
                 *selectedItem += 1;
-            }
 
-            //Set the reprint flag
-            reprintMenu = 1;
+                //Set the reprint flag
+                reprintMenu = 1;
+            }
         break;
     }
 
@@ -145,15 +146,11 @@ void HandleGameInput(struct Board *board)
         break;
         //Place a stone, when the <Enter> key was pressed
         case 13:
-            //Temporary validation and stone placement
-            if(board->field[board->selectedRow][board->selectedColumn] == 0)
-            {
-                //board->field[board->selectedRow][board->selectedColumn] = board->currentPlayer;
-                CheckIfValidTurn(board,board.selectedRow,board.selectedColumn);
-            }
+            //Run the game logic
+            *board = CheckIfValidTurn(*board, board->selectedRow, board->selectedColumn);
 
-            //Set the next players turn
-            UpdateCurrentPlayer(board);
+            //Recalculate the current score
+            CalculateScore(board);
 
             //Set the flag to reprint the board to the console
             board->updated = 1;

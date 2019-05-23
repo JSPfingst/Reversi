@@ -14,19 +14,37 @@ struct Board
      * he'd need to input to place a stone in a certain field.
      */
     int field[9][9];
+    //Indicates whether the second player is AI-controlled
+    int isMultiplayer;
+    //Indicates whether the board selection was updated
     int updated;
+    //Indicates whether the player has quit the game
     int gameIsOngoing;
+    //The player who is currently placing a stone
     int currentPlayer;
+    //The score of player one and player 2
     int scorePlayer1, scorePlayer2;
+    //The time at which the game was started
     int starttime;
+    //The current time of the game
     int time;
+    //Indicates whether the game is currently paused
     int isPaused;
+    /*
+     * The overall time that the game wasn't active
+     * Includes both paused time and time at which the game was
+     * inactive as a save file.
+     */
     int pauseDuration;
+    //The currently selected row and column of the field
     int selectedRow, selectedColumn;
+    //A counter to keep track of the amount of times each player had to pass subsequently
+    int passCountPlayer1, passCountPlayer2;
 };
 
 void UpdateCurrentPlayer(struct Board *board);
-void GenerateStartingBoard(struct Board *board);
+void GenerateStartingBoard(struct Board *board, int isMultiplayer);
+void CalculateScore(struct Board *board);
 long GetCurrentTime();
 
 #endif // BOARD_H_INCLUDED

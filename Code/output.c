@@ -18,7 +18,7 @@
 void OpenMainMenu()
 {
     struct Board board;
-    int selectedItem = 0, key = 0, exitGame = 0, loadResult = 0, printLoadMessage = 0;
+    int selectedItem = 0, key = 0, exitGame = 0, loadResult = 0, printLoadErrorMessage = 0;
 
     /*
      * Flag to reprint the menu to the console.
@@ -52,7 +52,7 @@ void OpenMainMenu()
             //Reset the reprint flag
             reprintMenu = 0;
 
-            if(printLoadMessage)
+            if(printLoadErrorMessage)
             {
                 printf("\n");
                 printf(" Der eingegebene Pfad konnte nicht gefunden werden. Dr%ccken Sie <Enter> zum Fortfahren.", '\x81');
@@ -60,25 +60,30 @@ void OpenMainMenu()
 
                 //Wait for the <Enter> key to be pressed
                 while(getch() != 13) { }
-                printLoadMessage = 0;
+                printLoadErrorMessage = 0;
 
-                //Set the flag to reprint the menu without the error message.
+                //Set the flag to reprint the menu without the error message
                 reprintMenu = 1;
             }
         }
 
-        //If the <Enter> key was pressed, return the current selection
+        //Check if the <Enter> key was pressed
         if(key == 13)
         {
             switch(selectedItem)
             {
-                //Create a new board and start the game
+                //Create a new board and start a game against the AI
                 case 0:
-                    GenerateStartingBoard(&board);
+                    GenerateStartingBoard(&board, 0);
+                    StartGame(&board);
+                break;
+                //Create a new board and start a game with two players
+                case 1:
+                    GenerateStartingBoard(&board, 1);
                     StartGame(&board);
                 break;
                 //Load a board from a specified save file and start the game
-                case 1:
+                case 2:
                     loadResult = LoadGame(&board);
                     if(loadResult == 1)
                     {
@@ -86,11 +91,11 @@ void OpenMainMenu()
                     }
                     else if(loadResult == -1)
                     {
-                        printLoadMessage = 1;
+                        printLoadErrorMessage = 1;
                     }
                 break;
                 //Set the flag to close the application
-                case 2:
+                case 3:
                     exitGame = 1;
                 break;
             }
@@ -117,23 +122,32 @@ void PrintMainMenu(int selectedItem)
 
     if(selectedItem == 0)
     {
-        printf(" > Spiel starten <\n");
+        printf(" > Einzelspieler <\n");
     }
     else
     {
-        printf("   Spiel starten\n");
+        printf("   Einzelspieler\n");
     }
 
     if(selectedItem == 1)
     {
-        printf(" > Spiel laden \x20\x20<\n");
+        printf(" > Mehrspieler\x20\x20 <\n");
     }
     else
     {
-        printf("   Spiel laden\n");
+        printf("   Mehrspieler\x20\x20\n");
     }
 
     if(selectedItem == 2)
+    {
+        printf(" > Spiel laden\x20\x20 <\n");
+    }
+    else
+    {
+        printf("   Spiel laden\x20\x20\n");
+    }
+
+    if(selectedItem == 3)
     {
         printf(" > Spiel beenden <\n");
     }
@@ -153,7 +167,7 @@ void PrintMainMenu(int selectedItem)
 void OpenPauseMenu(struct Board *board)
 {
     time_t pauseStart = time(&pauseStart), pauseEnd = 0;
-    int selectedItem = 0, reprintMenu = 1, printSaveMessage = 0, pauseDuration = 0, key = 0, saveResult = 0;
+    int selectedItem = 0, reprintMenu = 1, printSaveErrorMessage = 0, pauseDuration = 0, key = 0, saveResult = 0;
 
     while(pauseEnd == 0)
     {
@@ -177,7 +191,7 @@ void OpenPauseMenu(struct Board *board)
             //Reset the reprint flag
             reprintMenu = 0;
 
-            if(printSaveMessage)
+            if(printSaveErrorMessage)
             {
                 printf("\n");
                 printf(" Der eingegebene Pfad konnte nicht gefunden werden. Dr%ccken Sie <Enter> zum Fortfahren.", '\x81');
@@ -185,7 +199,7 @@ void OpenPauseMenu(struct Board *board)
 
                 //Wait for the <Enter> key to be pressed
                 while(getch() != 13) { }
-                printSaveMessage = 0;
+                printSaveErrorMessage = 0;
 
                 //Set the flag to reprint the menu without the error message.
                 reprintMenu = 1;
@@ -206,7 +220,8 @@ void OpenPauseMenu(struct Board *board)
                     saveResult = SaveGame(board);
                     if(saveResult == -1)
                     {
-                        printSaveMessage = 1;
+                        //Set the flag to signal, that an error occured while saving the game
+                        printSaveErrorMessage = 1;
                     }
 
                     /*
@@ -278,6 +293,16 @@ void PrintPauseMenu(int selectedItem)
 ///
 void printBoard(struct Board *board)
 {
+    char playerChar = 0;
+    if(board->currentPlayer == 1)
+    {
+        playerChar = 219;
+    }
+    else
+    {
+        playerChar = 177;
+    }
+
     char cell[5];
 
     system("cls");
@@ -286,14 +311,13 @@ void printBoard(struct Board *board)
     printf(" Verwenden Sie die Pfeiltasten, um ein Feld auszuw\x84hlen und dr%ccken Sie <Enter>\n", '\x81');
     printf(" um in dem Feld einen Stein Ihrer Farbe zu platzieren\n");
     printf("\n");
-    printf(" Am Zug ist derzeit: Spieler %i\n", board->currentPlayer);
+    printf(" Am Zug ist derzeit: Spieler %i %c\n", board->currentPlayer, playerChar);
+    printf(" Steine Spieler 1 %c: %i\n", 219, board->scorePlayer1);
+    printf(" Steine Spieler 2 %c: %i\n", 177, board->scorePlayer2);
     printf(" Vergangene Zeit: %i | Dr%ccken Sie 'p' um das Spiel zu pausieren\n", (int)difftime(board->time, board->starttime) - board->pauseDuration, '\x81');
     printf("\n");
 
-    /*
-     * The starting point of the Reversi board is on the bottom left,
-     * therefore the rows are iterated decrementally.
-     */
+    //Print the field to the console.
     for(int row = 1; row <= 17; row++)
     {
         if(row%2 == 0)
@@ -326,11 +350,11 @@ void printBoard(struct Board *board)
                     break;
                     //1: Player 1 has a stone at this position.
                     case 1:
-                        cell[1] = 177;
+                        cell[1] = 219;
                     break;
                     //2: Player 2 has a stone at this position.
                     case 2:
-                        cell[1] = 219;
+                        cell[1] = 177;
                     break;
                 }
 
@@ -340,6 +364,7 @@ void printBoard(struct Board *board)
         }
         else
         {
+            //Default
             cell[0] = 205;
             cell[1] = 205;
             cell[2] = 205;

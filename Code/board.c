@@ -8,9 +8,10 @@
 ///
 /// board: A pointer to the game state structure of the game.
 ///
-void GenerateStartingBoard(struct Board *board)
+void GenerateStartingBoard(struct Board *board, int isMultiplayer)
 {
     //Set the default values for the boards members
+    board->isMultiplayer = isMultiplayer;
     board->updated = 1;
     board->gameIsOngoing = 1;
     board->currentPlayer = 1;
@@ -45,7 +46,7 @@ void GenerateStartingBoard(struct Board *board)
 ///
 /// Updates the currentPlayer member of the given Board structure.
 ///
-/// board: The current game state of the game.
+/// board: A pointer to the game state structure of the game.
 ///
 /// returns: The game state, with the updated currentPlayer member.
 ///
@@ -58,6 +59,34 @@ void UpdateCurrentPlayer(struct Board *board)
     else if(board->currentPlayer == 2)
     {
         board->currentPlayer = 1;
+    }
+}
+
+///
+/// Calculates the current score of the game.
+///
+/// board: A pointer to the game state structure of the game.
+///
+void CalculateScore(struct Board *board)
+{
+    board->scorePlayer1 = 0;
+    board->scorePlayer2 = 0;
+    //Iterate over all cells
+    for(int row = 1; row <= 8; row++)
+    {
+        for(int column = 1; column <= 8; column++)
+        {
+            if(board->field[row][column] == 1)
+            {
+                //Stone is from player one
+                board->scorePlayer1++;
+            }
+            else if(board->field[row][column] == 2)
+            {
+                //Stone is from player two
+                board->scorePlayer2++;
+            }
+        }
     }
 }
 

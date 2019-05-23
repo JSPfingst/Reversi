@@ -5,26 +5,61 @@ File which handles all game operations regarding the logic of the game
 #include "board.h"
 #include "gamelogic.h"
 
+///
+/// Checks whether the current player has a valid turn.
+///
+/// board: A pointer to the games game state structure.
+///
+int CheckForValidTurns(struct Board *gameboard)
+{
+    int turnIsValid = 0;
+    int directions[8];
+    int validDirections[8];
+    int coordinateZ[8];
+    int coordinateX[8];
 
-int CheckIfFieldBlocked (struct Board gameboard,int posZ,int inputPosX) {
-    if (gameboard.field[inputPosX][posZ] != 0) {
-        return 1;
+    for(int row = 1; row <= 8; row++)
+    {
+        for(int column = 0; column <= 8; column++)
+        {
+            if (gameboard.field[row][column] == 0)
+            {
+                CheckIfNearStones(directions, gameboard, row, column);
+                turnIsValid = CheckIfValidDirection(directions, validDirections, row, column, &gameboard, coordinateZ, coordinateX);
+
+                if(turnIsValid)
+                {
+                    //At least one valid turn exists. Return 1
+                    return turnIsValid;
+                }
+            }
+        }
     }
-    else {
-        return 0;
-    }
+
+    //No valid turn found. Return 0
+    return 0;
 }
 
-
 struct Board CheckIfValidTurn (struct Board gameboard, int inputPosZ, int inputPosX) {
-int blocked = CheckIfFieldBlocked(gameboard,inputPosZ,inputPosX);
-if (blocked == 0) {
+    int turnIsValid = 0;
     int directions[8];
-    directions[0] = 0;
-    CheckIfNearStones(directions,gameboard,inputPosZ,inputPosX);
-    gameboard = CheckIfValidDirection(directions,inputPosZ,inputPosX,gameboard);
+    int validDirections[8];
+    int coordinateZ[8];
+    int coordinateX[8];
+
+    if (gameboard.field[inputPosZ][inputPosX] == 0) {
+        CheckIfNearStones(directions, gameboard, inputPosZ, inputPosX);
+        turnIsValid = CheckIfValidDirection(directions, validDirections, inputPosZ, inputPosX, &gameboard, coordinateZ, coordinateX);
+        if(turnIsValid)
+        {
+            gameboard = PlaceStones(gameboard, inputPosZ, inputPosX, validDirections, coordinateZ, coordinateX);
+
+            //Set the next players turn
+            UpdateCurrentPlayer(&gameboard);
+        }
     }
-return gameboard;
+
+    return gameboard;
 }
 
 
@@ -132,14 +167,11 @@ else {
         validDirections[7] = 0;
     }
 }
-};
+}
 
-struct Board CheckIfValidDirection (int Directions[],int posZ,int posX,struct Board gameboard) {
-int directionIsValid[8];
+int CheckIfValidDirection (int Directions[], int directionIsValid[], int posZ, int posX, struct Board *gameboard, int coordinateZ[], int coordinateX[]) {
 int i;
 int valid = 0;
-int coordinateZ[8];
-int coordinateX[8];
 
 for (int j=0;j<8;j++){
     directionIsValid[j] = 0;
@@ -150,7 +182,7 @@ if (Directions[0] == 1) {
     while(posZ+i <= 8 && posX-i >= 1) {
 
 
-        if(gameboard.field[posZ+i][posX-i] == gameboard.currentPlayer) {
+        if(gameboard->field[posZ+i][posX-i] == gameboard->currentPlayer) {
             directionIsValid[0] = 1;
             valid = 1;
             coordinateZ[0] = posZ+i;
@@ -164,7 +196,7 @@ if (Directions[1] == 1) {
     i = 2;
     while(posZ+i <= 8) {
 
-        if(gameboard.field[posZ+i][posX] == 1) {
+        if(gameboard->field[posZ+i][posX] == gameboard->currentPlayer) {
             directionIsValid[1] = 1;
             valid = 1;
             coordinateZ[1] = posZ+i;
@@ -177,7 +209,7 @@ if (Directions[2] == 1) {
     i = 2;
     while(posZ+i <= 8 && posX+i <= 8) {
 
-        if(gameboard.field[posZ+i][posX+i] == 1) {
+        if(gameboard->field[posZ+i][posX+i] == gameboard->currentPlayer) {
             directionIsValid[2] = 1;
             valid = 1;
             coordinateZ[2] = posZ+i;
@@ -190,7 +222,7 @@ if (Directions[3] == 1) {
     i = 2;
     while( posX-i >= 1)  {
 
-        if(gameboard.field[posZ][posX-i] == gameboard.currentPlayer) {
+        if(gameboard->field[posZ][posX-i] == gameboard->currentPlayer) {
             directionIsValid[3] = 1;
             valid = 1;
             coordinateZ[3] = posZ;
@@ -204,7 +236,7 @@ if (Directions[4] == 1) {
     i = 2;
     while( posX+i <= 8 ) {
 
-        if(gameboard.field[posZ][posX+i] == 2) {
+        if(gameboard->field[posZ][posX+i] == gameboard->currentPlayer) {
             directionIsValid[4] = 1;
             valid = 1;
             coordinateZ[4] = posZ;
@@ -217,7 +249,7 @@ if (Directions[5] == 1) {
     i = 2;
     while( posZ-i >= 1 && posX-i >= 1 ) {
 
-        if(gameboard.field[posZ-i][posX-i] == 2) {
+        if(gameboard->field[posZ-i][posX-i] == gameboard->currentPlayer) {
             directionIsValid[5] = 1;
             valid = 1;
             coordinateZ[5] = posZ-i;
@@ -230,7 +262,7 @@ if (Directions[6] == 1) {
     i = 2;
     while( posZ-i >= 1 ) {
 
-            if(gameboard.field[posZ-i][posX] == 2) {
+            if(gameboard->field[posZ-i][posX] == gameboard->currentPlayer) {
                 directionIsValid[6] = 1;
                 valid = 1;
                 coordinateZ[6] = posZ-i;
@@ -243,7 +275,7 @@ if (Directions[7] == 1) {
     i = 2;
     while( posZ-i >= 1 && posX+i <= 8) {
 
-        if(gameboard.field[posZ-i][posX+i] == 2) {
+        if(gameboard->field[posZ-i][posX+i] == gameboard->currentPlayer) {
             directionIsValid[7] = 1;
             valid = 1;
             coordinateZ[7] = posZ-i;
@@ -252,9 +284,13 @@ if (Directions[7] == 1) {
         i++;
     }
   }
+    return valid;
+}
 
+struct Board PlaceStones(struct Board gameboard, int posZ, int posX, int directionIsValid[], int coordinateZ[], int coordinateX[])
+{
+    int i = 0;
 
-if (valid == 1) {
     if (directionIsValid[0] == 1) {
         i = 0;
         do {
@@ -292,7 +328,7 @@ if (valid == 1) {
         do {
             gameboard.field[posZ][posX+i] = gameboard.currentPlayer;
             i++;
-        } while (posZ <= coordinateZ[4] && posX-i <= coordinateX[4]);
+        } while (posZ <= coordinateZ[4] && posX+i <= coordinateX[4]);
     }
 
     if (directionIsValid[5] == 1) {
@@ -319,6 +355,5 @@ if (valid == 1) {
         } while (posZ-i >= coordinateZ[7] && posX+i <= coordinateX[7]);
     }
 
- }
-return gameboard;
+    return gameboard;
 }
