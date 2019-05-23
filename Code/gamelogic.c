@@ -3,9 +3,8 @@ File which handles all game operations regarding the logic of the game
 **/
 #include <stdio.h>
 #include "board.h"
+#include "gamelogic.h"
 
-int CheckIfNearStones (struct Board gameboard, int posZ, int posX);
-void CheckIfValidDirection (int Directions[8],int posZ,int posX,struct Board gameboard);
 
 int CheckIfFieldBlocked (struct Board gameboard,int posZ,int inputPosX) {
     if (gameboard.field[inputPosX][posZ] != 0) {
@@ -17,18 +16,20 @@ int CheckIfFieldBlocked (struct Board gameboard,int posZ,int inputPosX) {
 }
 
 
-void CheckIfValidTurn (struct Board gameboard, int inputPosZ, int inputPosX) {
+struct Board CheckIfValidTurn (struct Board gameboard, int inputPosZ, int inputPosX) {
 int blocked = CheckIfFieldBlocked(gameboard,inputPosZ,inputPosX);
 if (blocked == 0) {
     int directions[8];
-    directions[8] = CheckIfNearStones(gameboard,inputPosZ,inputPosX);
-    CheckIfValidDirection(directions[8],inputPosZ,inputPosX,gameboard);
+    directions[0] = 0;
+    CheckIfNearStones(directions,gameboard,inputPosZ,inputPosX);
+    gameboard = CheckIfValidDirection(directions,inputPosZ,inputPosX,gameboard);
     }
-};
+return gameboard;
+}
 
 
-int CheckIfNearStones (struct Board gameboard, int posZ, int posX) {
-int validDirections[8];
+void CheckIfNearStones (int validDirections[], struct Board gameboard, int posZ, int posX) {
+
 
 if (gameboard.currentPlayer == 1) {
 
@@ -131,10 +132,9 @@ else {
         validDirections[7] = 0;
     }
 }
-return validDirections[8];
 };
 
-void CheckIfValidDirection (int Directions[8],int posZ,int posX,struct Board gameboard) {
+struct Board CheckIfValidDirection (int Directions[],int posZ,int posX,struct Board gameboard) {
 int directionIsValid[8];
 int i;
 int valid = 0;
@@ -146,147 +146,90 @@ for (int j=0;j<8;j++){
 }
 
 if (Directions[0] == 1) {
-    do {
-        i = 2;
-        if(gameboard.currentPlayer == 1) {
-            if(gameboard.field[posZ+i][posX-i] == 2) {
-                directionIsValid[0] = 1;
-                valid = 1;
-                coordinateZ[0] = posZ+i;
-                coordinateX[0] = posX-i;
-            }
-            i++;
+    i = 2;
+    while(posZ+i <= 8 && posX-i >= 1) {
+
+
+        if(gameboard.field[posZ+i][posX-i] == gameboard.currentPlayer) {
+            directionIsValid[0] = 1;
+            valid = 1;
+            coordinateZ[0] = posZ+i;
+            coordinateX[0] = posX-i;
         }
-        else {
-            if(gameboard.field[posZ+i][posZ-i] == 1) {
-                directionIsValid[0] = 1;
-                valid = 1;
-                coordinateZ[0] = posZ+i;
-                coordinateX[0] = posX-i;
-            }
-            i++;
-        }
-    } while(posZ+i < 8 && posX-i > 1);
+        i++;
+
+    } ;
   }
 if (Directions[1] == 1) {
-    do {
-        i = 2;
-        if(gameboard.currentPlayer == 1) {
-            if(gameboard.field[posZ+i][posX] == 2) {
-                directionIsValid[1] = 1;
-                valid = 1;
-                coordinateZ[1] = posZ+i;
-                coordinateX[1] = posX;
-            }
-            i++;
+    i = 2;
+    while(posZ+i <= 8) {
+
+        if(gameboard.field[posZ+i][posX] == 1) {
+            directionIsValid[1] = 1;
+            valid = 1;
+            coordinateZ[1] = posZ+i;
+            coordinateX[1] = posX;
         }
-        else {
-            if(gameboard.field[posZ+i][posX] == 1) {
-                directionIsValid[1] = 1;
-                valid = 1;
-                coordinateZ[1] = posZ+i;
-                coordinateX[1] = posX;
-            }
-            i++;
-        }
-    } while(posZ < 8);
+        i++;
+    } ;
   }
 if (Directions[2] == 1) {
-    do {
-        i = 2;
-        if(gameboard.currentPlayer == 1) {
-            if(gameboard.field[posZ+i][posX+i] == 2) {
-                directionIsValid[2] = 1;
-                valid = 1;
-                coordinateZ[2] = posZ+i;
-                coordinateX[2] = posX+i;
-            }
-            i++;
+    i = 2;
+    while(posZ+i <= 8 && posX+i <= 8) {
+
+        if(gameboard.field[posZ+i][posX+i] == 1) {
+            directionIsValid[2] = 1;
+            valid = 1;
+            coordinateZ[2] = posZ+i;
+            coordinateX[2] = posX+i;
         }
-        else {
-            if(gameboard.field[posZ+i][posX+i] == 1) {
-                directionIsValid[2] = 1;
-                valid = 1;
-                coordinateZ[2] = posZ+i;
-                coordinateX[2] = posX+i;
-            }
-            i++;
-        }
-    } while(posZ+i < 8 && posX+i < 8);
+        i++;
+    }
   }
 if (Directions[3] == 1) {
-    do {
-        i = 2;
-        if(gameboard.currentPlayer == 1) {
-            if(gameboard.field[posZ][posX-i] == 2) {
-                directionIsValid[3] = 1;
-                valid = 1;
-                coordinateZ[3] = posZ;
-                coordinateX[3] = posX-i;
-            }
-            i++;
+    i = 2;
+    while( posX-i >= 1)  {
+
+        if(gameboard.field[posZ][posX-i] == gameboard.currentPlayer) {
+            directionIsValid[3] = 1;
+            valid = 1;
+            coordinateZ[3] = posZ;
+            coordinateX[3] = posX-i;
         }
-        else {
-            if(gameboard.field[posZ][posX-i] == 1) {
-                directionIsValid[3] = 1;
-                valid = 1;
-                coordinateZ[3] = posZ;
-                coordinateX[3] = posX-i;
-            }
             i++;
-        }
-    } while( posX-i > 1 );
+
+    }
   }
 if (Directions[4] == 1) {
-    do {
-        i = 2;
-        if(gameboard.currentPlayer == 1) {
-            if(gameboard.field[posZ][posX+i] == 2) {
-                directionIsValid[4] = 1;
-                valid = 1;
-                coordinateZ[4] = posZ;
-                coordinateX[4] = posX+i;
-            }
-            i++;
+    i = 2;
+    while( posX+i <= 8 ) {
+
+        if(gameboard.field[posZ][posX+i] == 2) {
+            directionIsValid[4] = 1;
+            valid = 1;
+            coordinateZ[4] = posZ;
+            coordinateX[4] = posX+i;
         }
-        else {
-            if(gameboard.field[posZ][posX+i] == 1) {
-                directionIsValid[4] = 1;
-                valid = 1;
-                coordinateZ[4] = posZ;
-                coordinateX[4] = posX-i;
-            }
-            i++;
-        }
-    } while( posX+i < 9 );
+        i++;
+    }
   }
 if (Directions[5] == 1) {
-    do {
-        i = 2;
-        if(gameboard.currentPlayer == 1) {
-            if(gameboard.field[posZ-i][posX-i] == 2) {
-                directionIsValid[5] = 1;
-                valid = 1;
-                coordinateZ[5] = posZ-i;
-                coordinateX[5] = posX-i;
-            }
-            i++;
+    i = 2;
+    while( posZ-i >= 1 && posX-i >= 1 ) {
+
+        if(gameboard.field[posZ-i][posX-i] == 2) {
+            directionIsValid[5] = 1;
+            valid = 1;
+            coordinateZ[5] = posZ-i;
+            coordinateX[5] = posX-i;
         }
-        else {
-            if(gameboard.field[posZ-i][posX-i] == 1) {
-                directionIsValid[5] = 1;
-                valid = 1;
-                coordinateZ[5] = posZ-i;
-                coordinateX[5] = posX-i;
-            }
-            i++;
-        }
-    } while( posZ-i > 1 && posX-i > 1 );
+        i++;
+    }
   }
 if (Directions[6] == 1) {
-    do {
-        i = 2;
-        if(gameboard.currentPlayer == 1) {
+    i = 2;
+    while( posZ-i >= 1 ) {
+
             if(gameboard.field[posZ-i][posX] == 2) {
                 directionIsValid[6] = 1;
                 valid = 1;
@@ -294,107 +237,88 @@ if (Directions[6] == 1) {
                 coordinateX[6] = posX;
             }
             i++;
-        }
-        else {
-            if(gameboard.field[posZ-i][posX] == 1) {
-                directionIsValid[6] = 1;
-                valid = 1;
-                coordinateZ[6] = posZ-i;
-                coordinateX[6] = posX;
-            }
-            i++;
-        }
-    } while( posZ-i > 1 );
+    }
   }
 if (Directions[7] == 1) {
-    do {
-        i = 2;
-        if(gameboard.currentPlayer == 1) {
-            if(gameboard.field[posZ-i][posX+i] == 2) {
-                directionIsValid[7] = 1;
-                valid = 1;
-                coordinateZ[7] = posZ-i;
-                coordinateX[7] = posX+i;
-            }
-            i++;
+    i = 2;
+    while( posZ-i >= 1 && posX+i <= 8) {
+
+        if(gameboard.field[posZ-i][posX+i] == 2) {
+            directionIsValid[7] = 1;
+            valid = 1;
+            coordinateZ[7] = posZ-i;
+            coordinateX[7] = posX+i;
         }
-        else {
-            if(gameboard.field[posZ-i][posX+i] == 1) {
-                directionIsValid[7] = 1;
-                valid = 1;
-                coordinateZ[7] = posZ-i;
-                coordinateX[7] = posX+i;
-            }
-            i++;
-        }
-    } while( posZ-i > 1 && posX+i < 9);
+        i++;
+    }
   }
 
 
 if (valid == 1) {
     if (directionIsValid[0] == 1) {
+        i = 0;
         do {
-            i = 0;
             gameboard.field[posZ+i][posX-i] = gameboard.currentPlayer;
             i++;
         } while (posZ+i <= coordinateZ[0] && posX-i >= coordinateX[0]);
     }
 
     if (directionIsValid[1] == 1) {
+        i = 0;
         do {
-            i = 0;
             gameboard.field[posZ+i][posX] = gameboard.currentPlayer;
             i++;
         } while (posZ+i <= coordinateZ[1] && posX >= coordinateX[1]);
     }
 
     if (directionIsValid[2] == 1) {
+        i = 0;
         do {
-            i = 0;
             gameboard.field[posZ+i][posX+i] = gameboard.currentPlayer;
             i++;
         } while (posZ+i <= coordinateZ[2] && posX+i <= coordinateX[2]);
     }
 
     if (directionIsValid[3] == 1) {
+        i = 0;
         do {
-            i = 0;
             gameboard.field[posZ][posX-i] = gameboard.currentPlayer;
             i++;
         } while (posZ <= coordinateZ[3] && posX-i >= coordinateX[3]);
     }
 
     if (directionIsValid[4] == 1) {
+        i = 0;
         do {
-            i = 0;
             gameboard.field[posZ][posX+i] = gameboard.currentPlayer;
             i++;
         } while (posZ <= coordinateZ[4] && posX-i <= coordinateX[4]);
     }
 
     if (directionIsValid[5] == 1) {
+        i = 0;
         do {
-            i = 0;
             gameboard.field[posZ-i][posX-i] = gameboard.currentPlayer;
             i++;
         } while (posZ-i >= coordinateZ[5] && posX-i >= coordinateX[5]);
     }
 
     if (directionIsValid[6] == 1) {
+        i = 0;
         do {
-            i = 0;
             gameboard.field[posZ-i][posX] = gameboard.currentPlayer;
             i++;
         } while (posZ-i >= coordinateZ[6] && posX >= coordinateX[6]);
     }
 
     if (directionIsValid[7] == 1) {
+        i = 0;
         do {
-            i = 0;
             gameboard.field[posZ-i][posX+i] = gameboard.currentPlayer;
             i++;
         } while (posZ-i >= coordinateZ[7] && posX+i <= coordinateX[7]);
     }
 
  }
+return gameboard;
 }
