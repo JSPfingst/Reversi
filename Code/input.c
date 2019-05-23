@@ -1,5 +1,6 @@
 #include "board.h"
 #include "output.h"
+#include "gamelogic.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
@@ -147,7 +148,8 @@ void HandleGameInput(struct Board *board)
             //Temporary validation and stone placement
             if(board->field[board->selectedRow][board->selectedColumn] == 0)
             {
-                board->field[board->selectedRow][board->selectedColumn] = board->currentPlayer;
+                //board->field[board->selectedRow][board->selectedColumn] = board->currentPlayer;
+                CheckIfValidTurn(board,board.selectedRow,board.selectedColumn);
             }
 
             //Set the next players turn
