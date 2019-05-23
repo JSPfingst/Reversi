@@ -2,6 +2,7 @@
 File which handles all game operations regarding the game board and game menu
 **/
 #include "board.h"
+#include "gamelogic.h"
 #include <conio.h>
 #include <ctype.h>
 #include <time.h>
@@ -26,6 +27,7 @@ void GenerateStartingBoard(struct Board *board, int isMultiplayer)
     board->pauseDuration = 0;
     board->selectedRow = 1;
     board->selectedColumn = 1;
+    board->isQuitGame = 0;
 
     /*
      * The starting point of the Reversi board is on the bottom left,
@@ -51,18 +53,54 @@ void GenerateStartingBoard(struct Board *board, int isMultiplayer)
 ///
 /// board: A pointer to the game state structure of the game.
 ///
-/// returns: The game state, with the updated currentPlayer member.
+/// returns: 1 if the player was updated, 0 if not.
+///          -1 if the current player is invalid.
 ///
-void UpdateCurrentPlayer(struct Board *board)
+int UpdateCurrentPlayer(struct Board *board)
 {
     if(board->currentPlayer == 1)
     {
-        board->currentPlayer = 2;
+        if(CheckForValidTurns(board, 2))
+        {
+            board->currentPlayer = 2;
+            return 1;
+        }
+        else
+        {
+            if(CheckForValidTurns(board, 1))
+            {
+                board->currentPlayer = 1;
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
     }
     else if(board->currentPlayer == 2)
     {
-        board->currentPlayer = 1;
+        if(CheckForValidTurns(board, 1))
+        {
+            board->currentPlayer = 1;
+            return 1;
+        }
+        else
+        {
+            if(CheckForValidTurns(board, 2))
+            {
+                board->currentPlayer = 2;
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
     }
+
+    //Current player is invalid
+    return -1;
 }
 
 ///

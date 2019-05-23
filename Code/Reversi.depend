@@ -124,20 +124,21 @@
 
 1557805370 c:\users\teilnehmer.pc29\desktop\code\input.h
 
-1558642934 source:f:\reversi\code\board.c
+1558651972 source:f:\reversi\code\board.c
 	"board.h"
+	"gamelogic.h"
 	<conio.h>
 	<ctype.h>
 	<time.h>
 
-1558646019 f:\reversi\code\board.h
+1558651704 f:\reversi\code\board.h
 
-1558645155 source:f:\reversi\code\gamelogic.c
+1558650738 source:f:\reversi\code\gamelogic.c
 	<stdio.h>
 	"board.h"
 	"gamelogic.h"
 
-1558647104 source:f:\reversi\code\input.c
+1558650986 source:f:\reversi\code\input.c
 	"board.h"
 	"output.h"
 	"gamelogic.h"
@@ -146,7 +147,7 @@
 	<conio.h>
 	<ctype.h>
 
-1558634876 source:f:\reversi\code\main.c
+1558651283 source:f:\reversi\code\main.c
 	"board.h"
 	"output.h"
 	"input.h"
@@ -154,11 +155,11 @@
 	<conio.h>
 	<stdlib.h>
 
-1558527971 f:\reversi\code\output.h
+1558650986 f:\reversi\code\output.h
 
-1558526661 f:\reversi\code\input.h
+1558650986 f:\reversi\code\input.h
 
-1558643762 source:f:\reversi\code\output.c
+1558651452 source:f:\reversi\code\output.c
 	"board.h"
 	"input.h"
 	"output.h"
@@ -169,7 +170,7 @@
 	<time.h>
 	<windows.h>
 
-1558559161 source:f:\reversi\code\file.c
+1558650986 source:f:\reversi\code\file.c
 	"board.h"
 	"file.h"
 	"input.h"
@@ -179,7 +180,18 @@
 	<string.h>
 	<time.h>
 
-1558594822 f:\reversi\code\file.h
+1558650986 f:\reversi\code\file.h
 
-1558647059 f:\reversi\code\gamelogic.h
+1558651963 f:\reversi\code\gamelogic.h
+
+1558651733 source:f:\reversi\code\gameflow.c
+	"board.h"
+	"output.h"
+	"gameflow.h"
+	"input.h"
+	<stdio.h>
+	<conio.h>
+	<stdlib.h>
+
+1558651718 f:\reversi\code\gameflow.h
 

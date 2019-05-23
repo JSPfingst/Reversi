@@ -5,12 +5,19 @@ File which handles all game operations regarding the logic of the game
 #include "board.h"
 #include "gamelogic.h"
 
+void AITurn()
+{
+
+}
+
 ///
 /// Checks whether the current player has a valid turn.
 ///
 /// board: A pointer to the games game state structure.
 ///
-int CheckForValidTurns(struct Board *gameboard)
+/// returns: 1 if at least one valid turn exists, 0 if not.
+///
+int CheckForValidTurns(struct Board *gameboard, int player)
 {
     int turnIsValid = 0;
     int directions[8];
@@ -22,10 +29,10 @@ int CheckForValidTurns(struct Board *gameboard)
     {
         for(int column = 0; column <= 8; column++)
         {
-            if (gameboard.field[row][column] == 0)
+            if (gameboard->field[row][column] == 0)
             {
-                CheckIfNearStones(directions, gameboard, row, column);
-                turnIsValid = CheckIfValidDirection(directions, validDirections, row, column, &gameboard, coordinateZ, coordinateX);
+                CheckIfNearStones(directions, *gameboard, row, column);
+                turnIsValid = CheckIfValidDirection(directions, validDirections, row, column, gameboard, coordinateZ, coordinateX);
 
                 if(turnIsValid)
                 {
@@ -44,8 +51,6 @@ int CheckForValidTurns(struct Board *gameboard)
 /// Checks if the played stone is a valid turn and turns the needed stones
 ///
 
-
-
 struct Board CheckIfValidTurn (struct Board gameboard, int inputPosZ, int inputPosX) {
     int turnIsValid = 0;
     int directions[8];
@@ -53,15 +58,21 @@ struct Board CheckIfValidTurn (struct Board gameboard, int inputPosZ, int inputP
     int coordinateZ[8];
     int coordinateX[8];
 
-    if (gameboard.field[inputPosZ][inputPosX] == 0) {                                   ///if field not blocked
-        CheckIfNearStones(directions, gameboard, inputPosZ, inputPosX);                 /// checks if there are enemy stones around it
-        turnIsValid = CheckIfValidDirection(directions, validDirections, inputPosZ, inputPosX, &gameboard, coordinateZ, coordinateX); ///checks if the directions are valid
-        if(turnIsValid)
-        {
-            gameboard = PlaceStones(gameboard, inputPosZ, inputPosX, validDirections, coordinateZ, coordinateX); /// turns the stones effected by the new set stones
+    if(CheckForValidTurns(&gameboard, gameboard.currentPlayer))
+    {
+        if (gameboard.field[inputPosZ][inputPosX] == 0) {                                   /// if field not blocked
+            CheckIfNearStones(directions, gameboard, inputPosZ, inputPosX);					/// checks if there are enemy stones around it
+            turnIsValid = CheckIfValidDirection(directions, validDirections, inputPosZ, inputPosX, &gameboard, coordinateZ, coordinateX); ///checks if the directions are valid
+            if(turnIsValid)
+            {
+                gameboard = PlaceStones(gameboard, inputPosZ, inputPosX, validDirections, coordinateZ, coordinateX); /// turns the stones effected by the new set stone
 
-            //Set the next players turn
-            UpdateCurrentPlayer(&gameboard);  /// switch to next player
+                //Set the next players turn or end the game, if both players had to pass once
+                if(UpdateCurrentPlayer(&gameboard) == 0)
+                {
+                    gameboard.gameIsOngoing = 0;
+                }
+            }
         }
     }
 
@@ -77,7 +88,7 @@ void CheckIfNearStones (int validDirections[], struct Board gameboard, int posZ,
 
 if (gameboard.currentPlayer == 1) {
 
-    if (gameboard.field[posZ+1][posX-1] == 2) {                     ///Checks for the first stone around if its an enemy stone
+    if (gameboard.field[posZ+1][posX-1] == 2) {						///Checks for the first stone around if its an enemy stone
         validDirections[0] = 1;                                     ///Sets the direction as possible
     }
     else {
@@ -127,7 +138,7 @@ if (gameboard.currentPlayer == 1) {
     }
 }
 else {
-    if (gameboard.field[posZ+1][posX-1] == 1) {     ///Checks for Player 2
+    if (gameboard.field[posZ+1][posX-1] == 1) {				///Checks for Player 2
         validDirections[0] = 1;
     }
     else {
@@ -177,6 +188,7 @@ else {
     }
 }
 }
+
 ///
 /// function which checks if the possible directions are valid
 /// Checks if there is an own stone in the given direction and returns if the direction is valid as 1
@@ -191,22 +203,21 @@ for (int j=0;j<8;j++){
 
 if (Directions[0] == 1) {
     i = 2;
-    while(posZ+i <= 8 && posX-i >= 1) {
-                                                                                ///Checks for the given direction if there is an own stone
-
+    while(posZ+i <= 8 && posX-i >= 1 && gameboard->field[posZ+i][posX-i] != 0) {  ///Checks for the given direction if there is an own stone
         if(gameboard->field[posZ+i][posX-i] == gameboard->currentPlayer) {
             directionIsValid[0] = 1;
             valid = 1;
+
+			///Saves the coordinates of the last own stone in this direction
             coordinateZ[0] = posZ+i;
-            coordinateX[0] = posX-i;                                            ///Saves the coordinates of the last own stone in this direction
+            coordinateX[0] = posX-i;
         }
         i++;
-
-    } ;
+    }
   }
 if (Directions[1] == 1) {
     i = 2;
-    while(posZ+i <= 8) {
+    while(posZ+i <= 8 && gameboard->field[posZ+i][posX] != 0) {
 
         if(gameboard->field[posZ+i][posX] == gameboard->currentPlayer) {
             directionIsValid[1] = 1;
@@ -219,7 +230,7 @@ if (Directions[1] == 1) {
   }
 if (Directions[2] == 1) {
     i = 2;
-    while(posZ+i <= 8 && posX+i <= 8) {
+    while(posZ+i <= 8 && posX+i <= 8 && gameboard->field[posZ+i][posX+i] != 0) {
 
         if(gameboard->field[posZ+i][posX+i] == gameboard->currentPlayer) {
             directionIsValid[2] = 1;
@@ -232,7 +243,7 @@ if (Directions[2] == 1) {
   }
 if (Directions[3] == 1) {
     i = 2;
-    while( posX-i >= 1)  {
+    while( posX-i >= 1 && gameboard->field[posZ][posX-i] != 0)  {
 
         if(gameboard->field[posZ][posX-i] == gameboard->currentPlayer) {
             directionIsValid[3] = 1;
@@ -246,7 +257,7 @@ if (Directions[3] == 1) {
   }
 if (Directions[4] == 1) {
     i = 2;
-    while( posX+i <= 8 ) {
+    while( posX+i <= 8 && gameboard->field[posZ][posX+i] != 0) {
 
         if(gameboard->field[posZ][posX+i] == gameboard->currentPlayer) {
             directionIsValid[4] = 1;
@@ -259,7 +270,7 @@ if (Directions[4] == 1) {
   }
 if (Directions[5] == 1) {
     i = 2;
-    while( posZ-i >= 1 && posX-i >= 1 ) {
+    while( posZ-i >= 1 && posX-i >= 1 && gameboard->field[posZ-i][posX-i] != 0) {
 
         if(gameboard->field[posZ-i][posX-i] == gameboard->currentPlayer) {
             directionIsValid[5] = 1;
@@ -272,7 +283,7 @@ if (Directions[5] == 1) {
   }
 if (Directions[6] == 1) {
     i = 2;
-    while( posZ-i >= 1 ) {
+    while( posZ-i >= 1 && gameboard->field[posZ-i][posX] != 0) {
 
             if(gameboard->field[posZ-i][posX] == gameboard->currentPlayer) {
                 directionIsValid[6] = 1;
@@ -285,7 +296,7 @@ if (Directions[6] == 1) {
   }
 if (Directions[7] == 1) {
     i = 2;
-    while( posZ-i >= 1 && posX+i <= 8) {
+    while( posZ-i >= 1 && posX+i <= 8 && gameboard->field[posZ-i][posX+i] != 0) {
 
         if(gameboard->field[posZ-i][posX+i] == gameboard->currentPlayer) {
             directionIsValid[7] = 1;
@@ -305,12 +316,12 @@ struct Board PlaceStones(struct Board gameboard, int posZ, int posX, int directi
 {
     int i = 0;
 
-    if (directionIsValid[0] == 1) {                                         ///gets a valid directions
+    if (directionIsValid[0] == 1) {   ///gets a valid directions
         i = 0;
         do {
             gameboard.field[posZ+i][posX-i] = gameboard.currentPlayer;
             i++;
-        } while (posZ+i <= coordinateZ[0] && posX-i >= coordinateX[0]);     ///gets the coordinates of the last own stone
+        } while (posZ+i <= coordinateZ[0] && posX-i >= coordinateX[0]);   ///gets the coordinates of the last own stone
     }
 
     if (directionIsValid[1] == 1) {

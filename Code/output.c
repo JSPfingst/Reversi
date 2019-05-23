@@ -5,6 +5,7 @@ File which handles all operations regarding the output of the menus and the game
 #include "input.h"
 #include "output.h"
 #include "file.h"
+#include "gameflow.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
@@ -238,6 +239,7 @@ void OpenPauseMenu(struct Board *board)
                 case 2:
                     pauseEnd = time(&pauseEnd);
                     board->gameIsOngoing = 0;
+                    board->isQuitGame = 1;
                 break;
             }
         }

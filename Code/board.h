@@ -38,11 +38,11 @@ struct Board
     int pauseDuration;
     //The currently selected row and column of the field
     int selectedRow, selectedColumn;
-    //A counter to keep track of the amount of times each player had to pass subsequently
-    int passCountPlayer1, passCountPlayer2;
+    //Indicates wether the game was quit from the pause menu
+    int isQuitGame;
 };
 
-void UpdateCurrentPlayer(struct Board *board);
+int UpdateCurrentPlayer(struct Board *board);
 void GenerateStartingBoard(struct Board *board, int isMultiplayer);
 void CalculateScore(struct Board *board);
 long GetCurrentTime();
